@@ -1,0 +1,8 @@
+# Symlinks do paperclip tự tạo, đường dẫn npx là máy-cụ-thể — không đồng bộ
+paperclip
+paperclip-converting-plans-to-tasks
+paperclip-create-agent
+paperclip-create-plugin
+paperclip-dev
+para-memory-files
+.DS_Store
