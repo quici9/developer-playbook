@@ -1,0 +1,5 @@
+# Mỗi dòng: page|<path>            → trang phải render, không cuộn ngang, không lỗi console, không 404
+#           redirect|<from>|<to>   → <from> phải chuyển về <to> (so khớp pathname + giữ query)
+# Dòng bắt đầu bằng # bị bỏ qua.
+page|/
+redirect|/old-path?q=1|/new-path

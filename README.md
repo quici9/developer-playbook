@@ -71,7 +71,6 @@ triển khai air-gapped → bàn giao*.
 - `_config/CLAUDE.md` — chỉ dẫn toàn cục (ngôn ngữ, bối cảnh air-gapped mặc định,
   stack, nguyên tắc security-first), symlink về `~/.claude/CLAUDE.md`
 - `_config/install.sh` — tạo symlink trên máy mới
-- Symlink `paperclip*`, `para-memory-files` do tool tự tạo trên từng máy — đã gitignore
 
 ## Duy trì
 
