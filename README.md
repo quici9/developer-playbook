@@ -15,7 +15,7 @@ bash ~/.claude/skills/_config/install.sh   # symlink CLAUDE.md toàn cục
 
 Xong — Claude Code tự quét `~/.claude/skills/` mỗi phiên, không cần cấu hình thêm.
 
-## Danh sách skills (16)
+## Danh sách skills (17)
 
 Tổ chức theo vòng đời dự án: *đề xuất → thiết kế → xây dựng → đóng gói →
 triển khai air-gapped → bàn giao*.
@@ -36,6 +36,7 @@ triển khai air-gapped → bàn giao*.
 | [`secure-code-review`](secure-code-review/SKILL.md) | Review security-first cho Python/Go/Rust/C++/TS, chú trọng parser xử lý input hostile |
 | [`debug-assistant`](debug-assistant/SKILL.md) | Debug có hệ thống, gồm cả lỗi "local chạy được, lên air-gapped thì không" |
 | [`unit-test-generator`](unit-test-generator/SKILL.md) | Test pytest / go test / cargo test / vitest — happy, edge, error, hostile cases |
+| [`ui-design`](ui-design/SKILL.md) | Thiết kế giao diện từ triết lý (người dùng & khoảnh khắc, chọn lọc, một điểm nhấn, sự dịu, nhất quán, tôn trọng người đọc) + vòng render → nhìn → phán xét; mọi stack, asset offline |
 | [`web-frontend`](web-frontend/SKILL.md) | Angular/React/Vue cho tool nội bộ: state, bảng dữ liệu lớn, form, asset self-host |
 | [`ml-pipeline`](ml-pipeline/SKILL.md) | Pipeline ML offline: tiền xử lý, training tái lập được, MLflow self-hosted |
 | [`model-evaluation`](model-evaluation/SKILL.md) | Đánh giá model detection/imbalanced: PR-AUC, threshold theo chi phí FP/FN, Optuna |

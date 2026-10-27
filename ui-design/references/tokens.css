@@ -1,0 +1,211 @@
+/*
+ * Default design tokens — stack-agnostic (plain CSS custom properties).
+ * Use when the project has no design system. Light + dark, AA contrast checked
+ * on the surfaces they are meant for. Map into Tailwind/Angular/Vue per stacks.md.
+ *
+ * Theme selection: OS preference by default; [data-theme="light|dark"] on <html> wins.
+ * Density: [data-density="compact"] on any container tightens rows/controls.
+ */
+
+:root {
+  /* Typography — system stacks only; vendor a woff2 (e.g. Inter) to upgrade, never a CDN link */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --text-2xs: 11px;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --text-3xl: 36px;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* Spacing — 4px scale */
+  --space-0-5: 2px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-pill: 999px;
+
+  /* Control sizes */
+  --control-h-sm: 28px;
+  --control-h: 32px;
+  --control-h-lg: 40px;
+  --row-h: 40px;
+
+  /* Motion */
+  --dur-fast: 120ms;
+  --dur: 200ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* ---------- Light (default) ---------- */
+  color-scheme: light;
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f1f3f6;
+  --surface-hover: rgba(16, 24, 40, 0.04);
+  --surface-active: rgba(16, 24, 40, 0.07);
+
+  --border: #e3e6eb;
+  --border-strong: #cdd2da;
+  --border-input: #8c95a3;    /* 3.0:1 — boundary of inputs/checkboxes (WCAG 1.4.11) */
+  --divider: #eceef2;
+
+  --text: #111827;
+  --text-secondary: #4b5565;
+  --text-tertiary: #6b7280;   /* 4.8:1 on #fff */
+  --text-on-accent: #ffffff;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #eef3ff;
+  --accent-text: #1d4ed8;
+
+  --critical: #d92d20;  --critical-text: #b42318;  --critical-soft: #fef1f0;  --critical-border: #fcd0cc;
+  --high: #e8590c;      --high-text: #b93815;      --high-soft: #fff3eb;      --high-border: #fdd6bd;
+  --medium: #d99a06;    --medium-text: #8f5e05;    --medium-soft: #fff8e6;    --medium-border: #fbe3a6;
+  --low: #6b7280;       --low-text: #4b5565;       --low-soft: #f2f4f7;       --low-border: #dfe3e8;
+  --ok: #12a150;        --ok-text: #087443;        --ok-soft: #ecfbf2;        --ok-border: #b8ecd0;
+  --info: #2563eb;      --info-text: #1d4ed8;      --info-soft: #eef3ff;      --info-border: #c9d8fd;
+
+  /* Categorical series (charts) — fixed order, distinct from status */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #6250d6;
+  --series-5: #e87ba4;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 1px 3px rgba(16, 24, 40, 0.06);
+  --shadow-lg: 0 16px 40px rgba(16, 24, 40, 0.14), 0 2px 6px rgba(16, 24, 40, 0.06);
+  --ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
+}
+
+/* ---------- Dark ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0b0d12;
+    --surface: #12151b;
+    --surface-raised: #181c23;
+    --surface-sunken: #0e1015;
+    --surface-hover: rgba(255, 255, 255, 0.04);
+    --surface-active: rgba(255, 255, 255, 0.07);
+
+    --border: #232831;
+    --border-strong: #333a45;
+    --border-input: #636c7b;
+    --divider: #1b1f27;
+
+    --text: #e8eaee;
+    --text-secondary: #a6adba;
+    --text-tertiary: #7f8796;  /* 4.9:1 on #12151b */
+    --text-on-accent: #ffffff;
+
+    --accent: #2f6fe8;        /* 4.6:1 with white label */
+    --accent-hover: #2563eb;
+    --accent-soft: rgba(59, 130, 246, 0.14);
+    --accent-text: #8ab4fb;
+
+    --critical: #f04438;  --critical-text: #fda29b;  --critical-soft: rgba(240, 68, 56, 0.13);  --critical-border: rgba(240, 68, 56, 0.35);
+    --high: #f97316;      --high-text: #fdb07a;      --high-soft: rgba(249, 115, 22, 0.13);   --high-border: rgba(249, 115, 22, 0.35);
+    --medium: #f5b324;    --medium-text: #fcd27a;    --medium-soft: rgba(245, 179, 36, 0.12); --medium-border: rgba(245, 179, 36, 0.32);
+    --low: #8b93a1;       --low-text: #b7bdc8;       --low-soft: rgba(139, 147, 161, 0.13);   --low-border: rgba(139, 147, 161, 0.30);
+    --ok: #2fbf71;        --ok-text: #7fdcaa;        --ok-soft: rgba(47, 191, 113, 0.12);     --ok-border: rgba(47, 191, 113, 0.32);
+    --info: #3b82f6;      --info-text: #8ab4fb;      --info-soft: rgba(59, 130, 246, 0.14);   --info-border: rgba(59, 130, 246, 0.35);
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #9085e9;
+    --series-5: #d55181;
+
+    --shadow-sm: none;
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* Explicit dark (same values as the media block — keep them in sync) */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b0d12;
+  --surface: #12151b;
+  --surface-raised: #181c23;
+  --surface-sunken: #0e1015;
+  --surface-hover: rgba(255, 255, 255, 0.04);
+  --surface-active: rgba(255, 255, 255, 0.07);
+  --border: #232831;
+  --border-strong: #333a45;
+  --border-input: #636c7b;
+  --divider: #1b1f27;
+  --text: #e8eaee;
+  --text-secondary: #a6adba;
+  --text-tertiary: #7f8796;
+  --text-on-accent: #ffffff;
+  --accent: #2f6fe8;
+  --accent-hover: #2563eb;
+  --accent-soft: rgba(59, 130, 246, 0.14);
+  --accent-text: #8ab4fb;
+  --critical: #f04438;  --critical-text: #fda29b;  --critical-soft: rgba(240, 68, 56, 0.13);  --critical-border: rgba(240, 68, 56, 0.35);
+  --high: #f97316;      --high-text: #fdb07a;      --high-soft: rgba(249, 115, 22, 0.13);   --high-border: rgba(249, 115, 22, 0.35);
+  --medium: #f5b324;    --medium-text: #fcd27a;    --medium-soft: rgba(245, 179, 36, 0.12); --medium-border: rgba(245, 179, 36, 0.32);
+  --low: #8b93a1;       --low-text: #b7bdc8;       --low-soft: rgba(139, 147, 161, 0.13);   --low-border: rgba(139, 147, 161, 0.30);
+  --ok: #2fbf71;        --ok-text: #7fdcaa;        --ok-soft: rgba(47, 191, 113, 0.12);     --ok-border: rgba(47, 191, 113, 0.32);
+  --info: #3b82f6;      --info-text: #8ab4fb;      --info-soft: rgba(59, 130, 246, 0.14);   --info-border: rgba(59, 130, 246, 0.35);
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #9085e9;
+  --series-5: #d55181;
+  --shadow-sm: none;
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
+}
+
+[data-density="compact"] {
+  --control-h: 28px;
+  --control-h-lg: 32px;
+  --row-h: 32px;
+}
+
+/* Minimal base — optional, keeps every stack starting from the same ground */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+:focus-visible { outline: none; box-shadow: var(--ring); border-radius: var(--radius-xs); }
+.num, td.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--font-mono); font-size: 0.93em; }
