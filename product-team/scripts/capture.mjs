@@ -5,15 +5,16 @@ import { spawn } from "node:child_process";
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { findChrome, CHROME_FLAGS } from "./chrome.mjs";
 
 const [BASE, LIST, OUT, W = "1440", H = "900"] = process.argv.slice(2);
 const width = Number(W), height = Number(H);
-const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const CHROME = findChrome();
 mkdirSync(OUT, { recursive: true });
 const jobs = readFileSync(LIST, "utf8").split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#")).map((l) => l.split("|"));
 const PORT = 9700 + Math.floor(Math.random() * 200);
 const profile = mkdtempSync(join(tmpdir(), "research-cap-"));
-const chrome = spawn(CHROME, ["--headless=new", `--remote-debugging-port=${PORT}`, `--user-data-dir=${profile}`, "--no-first-run", "--hide-scrollbars", "about:blank"], { stdio: "ignore" });
+const chrome = spawn(CHROME, ["--headless=new", `--remote-debugging-port=${PORT}`, `--user-data-dir=${profile}`, "--no-first-run", "--hide-scrollbars", ...CHROME_FLAGS, "about:blank"], { stdio: "ignore" });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let ws, id = 0;
 const pending = new Map();

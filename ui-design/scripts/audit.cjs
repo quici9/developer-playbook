@@ -2,13 +2,24 @@
 // Use to compare variants or explain a felt problem; these are not targets.
 // Usage: node audit.cjs <file.html|url> [width=1440]
 // Exit 1 only on horizontal overflow. Dev-time only.
-const { execSync } = require('child_process');
+const fs = require('fs');
+const os = require('os');
 const path = require('path');
 function loadPlaywright() {
   try { return require('playwright'); } catch (_) {}
-  const hit = execSync("find ~/.npm/_npx -path '*node_modules/playwright/package.json' 2>/dev/null | head -1", { shell: '/bin/bash' }).toString().trim();
-  if (!hit) { console.error('Playwright not found. Run once online: npx playwright@latest install chromium'); process.exit(1); }
-  return require(path.dirname(hit));
+  // npx cache: ~/.npm/_npx on macOS/Linux, %LOCALAPPDATA%\npm-cache\_npx on Windows
+  const roots = [path.join(os.homedir(), '.npm', '_npx')];
+  if (process.env.LOCALAPPDATA) roots.push(path.join(process.env.LOCALAPPDATA, 'npm-cache', '_npx'));
+  for (const root of roots) {
+    let dirs = [];
+    try { dirs = fs.readdirSync(root); } catch (_) { continue; }
+    for (const d of dirs) {
+      const pkg = path.join(root, d, 'node_modules', 'playwright');
+      if (fs.existsSync(path.join(pkg, 'package.json'))) return require(pkg);
+    }
+  }
+  console.error('Playwright not found. Run once online: npx playwright@latest install chromium');
+  process.exit(1);
 }
 (async () => {
   const target = process.argv[2], width = Number(process.argv[3] || 1440);

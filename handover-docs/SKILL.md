@@ -114,8 +114,8 @@ Viết một script sinh riêng (`scripts/gen_*_docx.py`) gọi API `MoDDoc`; sc
 của bản Word, `.md` chỉ là bản đọc. **Không convert thẳng Markdown → docx cho bản chính thức**:
 văn xuôi mô tả sẽ không thành "Bước 1/2/3" và mất văn phong mệnh lệnh.
 
-Nếu dự án đã dùng pandoc + reference doc thay vì moddoc (ví dụ PT186S), quy cách phải khớp từng
-con số với bảng trên — xem `socp/scripts/make-docx-reference.py`.
+Nếu dự án đã dùng pandoc + reference doc thay vì moddoc, quy cách phải khớp từng con số với bảng trên;
+kiểm bằng `check_thethuc.py` như mọi tệp khác.
 
 **TUYỆT ĐỐI KHÔNG sửa tay tệp .docx** — lần sinh lại sau là mất. Nếu người dùng đã lỡ sửa tay,
 trích khác biệt ra rồi chuyển ngược vào mã nguồn trước khi sinh lại.

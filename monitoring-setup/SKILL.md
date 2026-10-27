@@ -5,7 +5,7 @@ description: >-
   Grafana, Loki, Alertmanager, structured logging, healthcheck, alert gắn với runbook
   — toàn bộ chạy offline, không SaaS. Use when the user says "setup monitoring",
   "thêm logging", "giám sát hệ thống", "cấu hình alert", "theo dõi production",
-  "metrics", "dashboard", "Prometheus", "Grafana", "Loki", "log tập trung",
+  "metrics", "Grafana dashboard", "Prometheus", "Grafana", "Loki", "log tập trung",
   or when preparing a system for handover to operations.
 ---
 

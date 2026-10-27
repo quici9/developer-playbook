@@ -7,14 +7,15 @@ import { spawn } from "node:child_process";
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { findChrome, CHROME_FLAGS } from "./chrome.mjs";
 
 const [BASE, FILE, W = "1280,1920", T = "light", THEME_KEY = "", EXTRA = ""] = process.argv.slice(2);
 const withQ = (p) => (EXTRA ? p + (p.includes("?") ? "&" : "?") + EXTRA : p);
 const widths = W.split(",").map(Number), themes = T.split(",");
-const CHROME = process.env.CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const CHROME = findChrome();
 const lines = readFileSync(FILE, "utf8").split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#")).map((l) => l.split("|"));
 const PORT = 9500 + Math.floor(Math.random() * 300);
-const chrome = spawn(CHROME, ["--headless=new", `--remote-debugging-port=${PORT}`, `--user-data-dir=${mkdtempSync(join(tmpdir(), "pc-"))}`, "--no-first-run", "--hide-scrollbars", "about:blank"], { stdio: "ignore" });
+const chrome = spawn(CHROME, ["--headless=new", `--remote-debugging-port=${PORT}`, `--user-data-dir=${mkdtempSync(join(tmpdir(), "pc-"))}`, "--no-first-run", "--hide-scrollbars", ...CHROME_FLAGS, "about:blank"], { stdio: "ignore" });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let ws, id = 0; const pending = new Map(); let consoleErrors = [];
 const send = (method, params = {}) => new Promise((r) => { const i = ++id; pending.set(i, r); ws.send(JSON.stringify({ id: i, method, params })); });

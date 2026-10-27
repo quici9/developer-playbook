@@ -8,12 +8,21 @@ air-gapped**, hoàn thiện rồi bàn giao cho đội hạ tầng/khai thác v�
 
 ## Setup máy mới
 
+Chạy được trên macOS, Linux, WSL và Windows (Git Bash, đi kèm Git for Windows).
+
 ```bash
 git clone https://github.com/quici9/developer-playbook.git ~/.claude/skills
-bash ~/.claude/skills/_config/install.sh   # symlink CLAUDE.md toàn cục
+bash ~/.claude/skills/_config/install.sh   # CLAUDE.md toàn cục + agent của product-team, rồi kiểm tra môi trường
 ```
 
-Xong — Claude Code tự quét `~/.claude/skills/` mỗi phiên, không cần cấu hình thêm.
+- macOS / Linux / WSL: tạo symlink, nên `git pull` là xong.
+- Windows (Git Bash): tạo **bản copy**, vì symlink cần Developer Mode. Sau mỗi `git pull`, chạy lại `install.sh`.
+  Muốn dùng bản copy ở mọi nơi thì đặt `INSTALL_MODE=copy`.
+- `install.sh --check`: chỉ kiểm tra môi trường.
+  - Bắt buộc: git, Node ≥ 22, và Chrome/Chromium/Edge (cho các script chụp ảnh).
+  - Tuỳ chọn: python3 (cho .docx) và docker.
+  - Chrome nằm chỗ lạ thì đặt `CHROME=/đường/dẫn`.
+- Script ghi đè file chỉ khi file đó là bản do chính nó tạo ra. File bạn tự sửa ở `~/.claude` thì nó dừng lại để bạn gộp tay.
 
 ## Danh sách skills (18)
 
