@@ -47,6 +47,7 @@ Sau đó code test hoàn chỉnh chạy được ngay + lệnh chạy (`pytest p
 
 - Test phải chạy được ngay — đúng import, đúng đường dẫn, đúng framework dự án đang dùng (kiểm tra trước)
 - Không viết test khẳng định điều vô nghĩa (assert mock được gọi mà không kiểm tra hành vi)
+- Test phụ thuộc thời gian (TOTP, "hôm nay", cửa sổ N giờ, hết hạn) phải cố định đồng hồ (inject `now`, freezegun, `vi.setSystemTime`); không dựa vào đồng hồ thật, vì test sẽ chập chờn ở mốc chuyển bước/chuyển ngày
 - Mock tối thiểu, chỉ ở ranh giới IO; test cần db/service thật thì nói rõ đó là integration test
 - Nếu code khó test (hàm làm quá nhiều việc, IO trộn logic) → đề xuất tách nhỏ trước, kèm cách tách
 - Chạy được test thì chạy và báo kết quả thật, không chỉ đưa code

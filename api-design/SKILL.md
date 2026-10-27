@@ -50,6 +50,7 @@ API nội bộ giữa các hệ thống của đội blue/red team vẫn cần h
 
 ## Rules
 
+- Repo đã có quy ước (prefix URL, kiểu ID, dạng lỗi, phân trang) thì theo quy ước đó: nhất quán trong một hệ thống quan trọng hơn chuẩn chung. Các mặc định trên dùng cho API mới hoàn toàn; muốn đổi quy ước cũ thì đề xuất riêng
 - Breaking change (đổi field, đổi nghĩa, bỏ endpoint) → bump version, giữ version cũ một thời gian chuyển tiếp có ghi trong docs
 - Thiết kế xong liệt kê luôn bảng endpoint: method, path, quyền yêu cầu, mô tả 1 dòng — bảng này đi vào tài liệu bàn giao
 - Đừng thiết kế generic quá mức (GraphQL-hóa, HATEOAS đầy đủ) cho API nội bộ — nhất quán và dễ đoán quan trọng hơn thanh lịch

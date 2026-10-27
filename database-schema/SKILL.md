@@ -51,6 +51,7 @@ Mặc định PostgreSQL (self-hosted, chạy tốt air-gapped, đủ cho hầu 
 
 ## Rules
 
+- Schema đã có quy ước (kiểu PK, tên bảng, cột thời gian) thì bảng mới theo quy ước đó, kể cả khi khác mặc định ở trên; muốn đổi thì đề xuất migration riêng, không trộn hai kiểu
 - Ra schema luôn kèm: ERD + DDL đầy đủ chạy được + giải thích quyết định không hiển nhiên
 - Hỏi khối lượng dữ liệu dự kiến trước khi thiết kế bảng ingest — bảng 10K rows và 1B rows là hai bài toán khác nhau
 - Không đề xuất thêm hệ CSDL thứ hai (Elastic, Click house, Mongo...) khi Postgres còn gánh được — mỗi hệ thêm là gánh nặng vận hành trên air-gapped

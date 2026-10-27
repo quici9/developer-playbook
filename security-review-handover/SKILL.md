@@ -27,6 +27,7 @@ Checklist bắt buộc trước khi hệ thống rời tay dev. Sau bàn giao, v
 - [ ] Session/token: hết hạn hợp lý, revoke được, HttpOnly+Secure cookie hoặc token lưu đúng chỗ
 - [ ] Tài khoản mặc định/seeded: KHÔNG có admin/admin — mật khẩu khởi tạo bắt buộc đổi lần đầu
 - [ ] Brute-force: rate limit + lockout trên login
+- [ ] Tài khoản quản trị có xác thực 2 lớp (TOTP chạy offline được); có đường khôi phục (mã dự phòng / admin reset / CLI trên host) được ghi trong RUNBOOK; đồng hồ máy chủ đồng bộ NTP nội bộ
 - [ ] Tích hợp LDAP/AD nội bộ (nếu có): bind an toàn, không lộ credential bind trong config plaintext
 - [ ] Phân quyền theo vai trò khớp thực tế đội blue/red: ai thấy gì, ai sửa gì — có ma trận quyền trong docs
 

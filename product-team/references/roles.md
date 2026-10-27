@@ -1,37 +1,45 @@
-# Role briefs (paste into the Agent/SendMessage prompt; fill <…>)
+# Role briefs (paste into the Agent prompt; fill <…>)
+
+One agent per task: a brief starts a fresh agent, the agent reports and stops. Fixes after review are a new brief
+(spec + numbered findings + the hash to fix), never a follow-up message to the old agent.
 
 Every brief must stand alone. Always include:
 - the spec path and the mockup shots;
 - the person's sections;
 - dependencies;
-- the branch / worktree / compose name;
+- the branch / worktree / compose project name;
 - the files they own;
+- "ask first" for medium/large tasks (omit for small ones);
 - "No push, no deploy";
-- the report format (commit hash + checks + shots).
+- the report format.
 
 ## dev-backend
-"New round <round>. You are dev-backend. Spec: <path> (read all; §0 is binding). Your parts in order:
-(1) §<n> API first: <endpoints>. Every endpoint needs a scope check (404 outside scope), a test (including a leak
-test) and a doc entry. When it is committed, message dev-shell, dev-pages and me with the shapes.
-(2) <pages you own>.
-Branch <prefix>/<round>-data from <base>, worktree in the scratchpad, compose project -p <proj>-<round>-data,
-logs in <dir>. You own: <files>. Ask before touching others' files. No push, no deploy.
-Report: hash + suite count + checks."
+"Task <round>/<n>, ask first. You are dev-backend. Spec: <path> (§0 binding). Your part: §<n>: <endpoints / migration>.
+Every endpoint needs a scope check (404 outside scope), a test (incl. a leak test) and a doc entry. When the API is
+committed, message <dev-pages/dev-shell> and me the exact shapes.
+Branch <prefix>/<round>-data from <base>, worktree <path>, compose project <name>. You own: <files>.
+No push, no deploy. Report: hash · what changed · suite count · assumptions."
 
 ## dev-shell
-"You are dev-shell. FIRST: <shared primitives: layout/tokens/charts/helpers>. Commit, then message the API to
-dev-pages and dev-backend. Then <your pages>. You own App/router, layout, theme tokens, shared chart primitives
-and the shared helpers listed in ownership.md. Others edit only their own route lines."
+"Task <round>/<n>, ask first. You are dev-shell. FIRST: <shared primitives: layout/tokens/charts/helpers>. Commit,
+then message the API to dev-pages and dev-backend. Then <your parts>. You own <files from ownership.md>.
+Branch / worktree / port: <…>. No push, no deploy."
 
 ## dev-pages
-"You are dev-pages. Parts: <pages>. Reuse the shell primitives and helpers; do not fork them. Shared drawer and
-count helpers are single-source. Code against the spec shapes until backend lands, then switch and delete the mocks."
+"Task <round>/<n>, ask first. You are dev-pages. Spec: <path>, mockup shots: <path>. Parts: <pages>. Reuse the shell
+primitives and helpers; do not fork them. Code against the spec shapes until the backend lands, then switch.
+Look at your page once at <main width> and judge it with ui-design critique. Branch / worktree / port: <…>.
+No push, no deploy."
+
+## Fix brief (any dev role)
+"Fix task for <hash> on <branch>. Spec: <path> §<n>. Findings to fix (FINAL): 1. … 2. … Nothing else changes.
+Same branch/worktree, compose project <name>. Report: hash · each finding → fixed how."
 
 ## integrator
 "You are integrator. Create <prefix>/<round> from <base> in a new worktree. Merge order: backend → shell → pages.
-After each merge run the gate (`gate.sh`) and report findings with an owner. Add a gate for every bug found so it
-cannot return. When green, take the acceptance shots listed in spec §acceptance into <dir>. Report: final hash,
-gate summary, shots, notes for the client. No push, no deploy. Use your own compose project and log dir."
+After each merge run the gate and report findings with an owner. Add a gate for every bug found. When green, take
+the acceptance shots in spec §acceptance into <dir>. Watch long jobs yourself; report as soon as they finish.
+Report: final hash, gate summary, shots, notes for the client. No push, no deploy."
 
 ## panel-user (optional)
 "You play <persona>: <duties, context>. Review the shots / mockup at <path> ONLY from your duty's point of view:

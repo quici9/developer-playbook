@@ -31,28 +31,64 @@ Code sản phẩm do các dev agent viết.
    - `.claude/team/gate.conf`: tham số cho `scripts/gate.sh`;
    - `.claude/team/pages.txt`: danh sách trang cho `scripts/pages-check.mjs`;
    - `.claude/team/decisions.md`: sổ quyết định của khách.
-4. Thêm vào `CLAUDE.md` của repo một mục ngắn trỏ tới `.claude/team/project.md`. Không chép lại nội dung.
-5. Cho người dùng xem tóm tắt cấu hình. Sửa nếu họ yêu cầu.
+4. Thêm vào `CLAUDE.md` của repo mục **Working context** theo `templates/claude-context.md`, tối đa 60 dòng.
+   Mục này gồm cấu trúc repo, helper dùng chung, lệnh và quy tắc rút gọn. Mọi agent đều tự nạp `CLAUDE.md`,
+   nên đây là context rẻ nhất. Chi tiết vẫn để trong `project.md`, không chép sang.
+5. Cài skill `verify` vào repo: copy `templates/verify/` sang `.claude/skills/verify/`. Script đọc `gate.conf`.
+   Chạy thử `verify.sh backend` và `verify.sh frontend` một lần để chắc lệnh đúng.
+   Dev dùng skill này thay cho lệnh thô, vì output gọn hơn và context không phình.
+6. Cho người dùng xem tóm tắt cấu hình. Sửa nếu họ yêu cầu.
 
 ## Bước 2: một đợt làm việc (round)
+
+Đầu tiên chọn luồng theo cỡ việc. Đừng chạy luồng lớn cho việc nhỏ.
+- **Việc nhỏ (S):** sửa lỗi hoặc một thay đổi rõ ràng, không đổi thiết kế (một hàm, một cột, một câu chữ).
+- **Việc vừa/lớn (M/L):** thêm hoặc đổi màn hình, đổi luồng, thêm API, migration, bảo mật.
+
+### Luồng S (4 bước)
+1. **Brief:** lead viết brief tự đủ (không cần mockup hay spec riêng). Một dev, không hỏi trước.
+2. **Dev:** làm, chạy `verify`, commit, báo cáo.
+3. **Kiểm:** đổi giao diện thì integrator chạy gate và chụp đúng các trang bị đổi; chỉ đổi backend thì kết quả
+   `verify` đầy đủ của dev là đủ. Lead xem ảnh hoặc diff một lần.
+4. **Trình khách** theo `templates/report.md`.
+
+### Luồng M/L (8 bước)
 1. **Nghiên cứu:** chụp hiện trạng bằng `scripts/capture.mjs`, đọc code và dữ liệu thật mà hệ thống có.
-   Không thiết kế thứ dữ liệu không có. Nếu có panel thì hỏi nhu cầu, nhưng **mình là người thiết kế**.
-2. **Mockup:** HTML tĩnh trong scratchpad, chụp bằng `scripts/framecap.mjs`, gửi ảnh cho khách.
-   Nêu rõ "đây là bản vẽ, chưa phải code".
-3. **Khách quyết:** chỉ hỏi các điểm thật sự cần khách quyết (≤ 6). Ghi vào `decisions.md`.
-4. **Spec:** viết theo `templates/spec.md` (§0 quy tắc, §n từng phần có chủ, phần nghiệm thu, phân công, thứ tự gộp).
-5. **Giao việc:** spawn hoặc gửi tin cho các vai (định nghĩa agent: `dev-backend`, `dev-shell`, `dev-pages`,
-   `integrator`, `panel-user`).
-   - Mỗi dev: nhánh `<prefix>/<round>-<area>` từ tip đang chạy, worktree riêng trong scratchpad,
-     compose project và thư mục log riêng.
-   - Brief phải tự đủ: đường dẫn spec, mockup, phần của họ, phụ thuộc, chủ file, "no push, no deploy".
-6. **Review từng commit:** xem ảnh chụp thật, so với mockup và §0. Trả lời từng dev ngắn gọn:
-   duyệt, hoặc liệt kê lỗi đánh số.
-7. **Integrator:** gộp theo thứ tự (backend → shell → pages), chạy `scripts/gate.sh`, chụp bộ ảnh nghiệm thu.
-   Integrator thêm gate cho mọi lỗi tìm thấy để lỗi không quay lại.
-8. **Trình khách:** gửi ảnh nghiệm thu, kết quả gate, ảnh hưởng khi deploy, cách rollback.
-   Push và deploy **chỉ khi khách nói rõ**.
-9. **Deploy:** theo quy trình trong `project.md`. Phải backup trước, chạy kiểm tra sau deploy, ghi lại cách rollback.
+   Không thiết kế thứ dữ liệu không có. Panel người dùng mặc định tắt; chỉ dùng khi khách muốn nghe một vai cụ thể.
+   **Mình là người thiết kế.**
+2. **Mockup:** thiết kế theo skill `ui-design`, đi đủ 7 bước của nó.
+   - Token lấy từ design system của dự án; dự án chưa có thì dùng `ui-design/references/tokens.css`.
+   - Mockup là HTML tĩnh trong scratchpad, chụp bằng `scripts/framecap.mjs` ở các độ rộng dự án cam kết.
+   - Tự phán xét bằng `ui-design/references/critique.md` trước khi gửi khách.
+   - Gửi kèm câu "đây là bản vẽ, chưa phải code".
+   - Việc không đổi giao diện (API, migration, bảo mật) thì thay mockup bằng phương án ngắn: luồng, dữ liệu, rủi ro.
+3. **Khách quyết:** chỉ hỏi các điểm thật sự cần khách quyết (≤ 6), gộp vào **một** lượt hỏi cùng mockup.
+   Ghi vào `decisions.md`.
+4. **Spec:** viết theo `templates/spec.md` (§0, §n từng phần có chủ, nghiệm thu, phân công, thứ tự gộp).
+5. **Giao việc:** mỗi phần một agent mới, brief có "ask first" (mẫu trong `references/roles.md`).
+   - **dev-shell chỉ khi đợt này đổi thứ dùng chung** (layout, token, chart, helper); không thì dev-pages tự làm.
+   - **Hỏi trước:** dev trả về câu hỏi chặn (≤ 5) hoặc READY. Lead trả lời **một lần**, đánh dấu FINAL. Điểm nào
+     thuộc quyền khách thì hỏi khách, rồi trả lời dev. Không ai code trước khi có câu trả lời.
+   - Các dev chạy song song. Backend gửi shape API cho pages bằng SendMessage ngay khi commit.
+6. **Integrator:** gộp theo thứ tự backend → shell → pages, chạy `scripts/gate.sh`, chụp bộ ảnh nghiệm thu.
+   Mỗi lỗi tìm thấy thành một gate mới. Đợt chỉ có một nhánh dev thì không cần gộp: chạy gate và chụp ảnh trên
+   chính nhánh đó.
+7. **Lead review một lần, trên ảnh nghiệm thu và diff.** Phán xét bằng `ui-design/references/critique.md`: cảm giác
+   đầu tiên trước, nguyên nhân theo triết lý sau. Sửa ở gốc, đừng vá đúng chỗ bị chỉ.
+   - Đạt: sang bước 8.
+   - Có lỗi: gom **tất cả** lỗi thành một danh sách đánh số, mỗi dev một **brief sửa** cho một agent mới, rồi quay
+     lại bước 6. Không review lẻ từng commit giữa chừng.
+8. **Trình khách:** ảnh nghiệm thu, kết quả gate, ảnh hưởng khi deploy, cách rollback (`templates/report.md`).
+   Push và deploy **chỉ khi khách nói rõ**. Deploy theo `project.md`: backup trước, kiểm tra sau, ghi cách rollback.
+
+### Chung cho cả hai luồng
+- **Mỗi nhiệm vụ một agent mới; agent xong việc thì kết thúc.** Không giữ teammate qua nhiều nhiệm vụ hay đợt.
+  Context phình làm mỗi lần gọi đắt dần. Eval 2026-10-27: teammate sống lâu tốn 8,8M token cho một bài mà
+  agent mới chỉ tốn 0,4–0,7M. Trạng thái giữa các nhiệm vụ nằm trong spec, `decisions.md` và commit.
+- SendMessage chỉ để phối hợp **trong lúc** một nhiệm vụ đang chạy.
+- Mỗi dev: nhánh `<prefix>/<round>-<area>` từ tip đang chạy, worktree riêng, compose project và log riêng.
+  Brief ghi sẵn tên compose project.
+- Lead tự theo dõi việc dài bằng Monitor (xem luật điều phối).
 
 ## Luật điều phối (rút từ kinh nghiệm, không bỏ qua)
 - **Một quyết định chỉ chốt một lần, đánh dấu FINAL.** Không đảo quyết định khi tin nhắn còn đang đi:
@@ -69,7 +105,13 @@ Code sản phẩm do các dev agent viết.
 - **Tin nhắn chéo:** khi dev báo việc đã làm theo một tin cũ, kiểm tra tip thực tế trước khi giao việc mới.
 - **Tin idle của dev:** chỉ tóm tắt cho người dùng khi có thông tin mới. Nếu không có, trả lời một câu.
 - **Không tin "xong" khi chưa có bằng chứng:** cần hash commit, kết quả gate và ảnh chụp.
-- **Dev chờ notification mà không kiểm log:** nếu lâu không thấy báo cáo thì hỏi trạng thái một lần.
+- **Lead tự theo dõi, không chờ thụ động:** sau khi giao việc dài (gate, suite, chụp ảnh, build), tự Monitor log
+  và tip nhánh của agent. Log đã báo xong mà agent chưa báo cáo thì đọc kết quả rồi nhắc ngay. Khách không được
+  là người phát hiện đội đang đứng.
+- **Dev chỉ chạy kiểm tra hẹp** (check của file mình, build, một ảnh trang mình). Gate đầy đủ và ảnh nghiệm thu
+  là việc của integrator. Eval: dev tự chạy gate đầy đủ làm một bài Radar mất 49–79 phút thay vì 13.
+- **Agent bị từ chối một lệnh** thì phải thử lại bằng lệnh đơn, không được kết luận "Bash bị khoá". Báo cáo nói
+  "chưa test" thì không được coi là xong.
 - **Báo khách bằng ngôn ngữ của khách:** chỉ nói thay đổi gì, ảnh hưởng gì, cần quyết gì.
   Không dán log, không nhắc tên hàm nếu không cần.
 
@@ -77,7 +119,8 @@ Code sản phẩm do các dev agent viết.
 - `references/intake.md`: câu hỏi intake và cách suy ra mặc định.
 - `references/rules-baseline.md`: §0 chung (UI, dữ liệu cũ, số liệu, thời gian, văn phong, air-gapped).
 - `references/roles.md`: mẫu brief cho từng vai khi spawn hoặc giao việc.
-- `templates/`: project.md, ownership.md, gate.conf, pages.txt, spec.md, decisions.md, report.md.
+- `templates/`: project.md, ownership.md, gate.conf, pages.txt, spec.md, decisions.md, report.md,
+  claude-context.md (mục Working context cho CLAUDE.md của repo), verify/ (skill verify cho repo).
 - `scripts/`:
   - `capture.mjs`: chụp các trang của dev server;
   - `framecap.mjs`: chụp các khung `.frame` trong một mockup HTML;

@@ -116,6 +116,17 @@ là cắt quá tay. Sửa một chiều thì phải để ý đừng rơi sang c
 Khi người dùng nhận xét về thiết kế ("nặng", "rối", "nhạt"), hãy truy về triết lý nào đang
 bị vi phạm, rồi sửa ở tầng đó. Đừng chỉ sửa đúng chỗ họ chỉ vào.
 
+## Trong đội agent (skill `product-team`)
+Triết lý và cách làm ở trên giữ nguyên. Chỉ phân vai:
+- **Lead designer** đi đủ 7 bước khi làm mockup, và dùng `references/critique.md` khi review ảnh nghiệm thu.
+  Kết quả phán xét chuyển thành danh sách lỗi đánh số trong brief sửa.
+- **dev-shell** dựng token: design system của dự án được ưu tiên; dự án chưa có thì khởi đầu từ `references/tokens.css`.
+- **dev-pages** không thiết kế lại. Chỗ spec bỏ ngỏ thì quyết theo triết lý này, rồi liệt kê các quyết định đó trong
+  báo cáo. Nhìn trang của mình một lần bằng bước 1–2 của `critique.md`.
+- **Chụp ảnh trong đội** dùng script của `product-team` (Chrome local, độ rộng và theme trong `.claude/team/gate.conf`).
+  Không dùng `scripts/shot.sh`: mặc định 1440/390 của nó không phải độ rộng dự án cam kết, và nó cần Playwright.
+  `scripts/audit.cjs` vẫn dùng được để đo.
+
 ## Ràng buộc air-gapped
 Không dùng font, icon hay ảnh từ CDN trong sản phẩm. Font dùng system stack hoặc vendor
 woff2 vào repo; icon dùng package local hoặc inline SVG. Các script trong `scripts/` là

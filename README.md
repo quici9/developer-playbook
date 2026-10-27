@@ -15,7 +15,7 @@ bash ~/.claude/skills/_config/install.sh   # symlink CLAUDE.md toàn cục
 
 Xong — Claude Code tự quét `~/.claude/skills/` mỗi phiên, không cần cấu hình thêm.
 
-## Danh sách skills (17)
+## Danh sách skills (18)
 
 Tổ chức theo vòng đời dự án: *đề xuất → thiết kế → xây dựng → đóng gói →
 triển khai air-gapped → bàn giao*.
@@ -36,6 +36,7 @@ triển khai air-gapped → bàn giao*.
 | [`secure-code-review`](secure-code-review/SKILL.md) | Review security-first cho Python/Go/Rust/C++/TS, chú trọng parser xử lý input hostile |
 | [`debug-assistant`](debug-assistant/SKILL.md) | Debug có hệ thống, gồm cả lỗi "local chạy được, lên air-gapped thì không" |
 | [`unit-test-generator`](unit-test-generator/SKILL.md) | Test pytest / go test / cargo test / vitest — happy, edge, error, hostile cases |
+| [`product-team`](product-team/SKILL.md) | Đội nhiều agent cho dự án web: lead designer (spec, review, FINAL) + dev-backend/shell/pages + integrator; luồng S/M-L, mỗi nhiệm vụ một agent mới, hỏi trước khi code, skill `verify` cho repo. Agent nằm ở `_config/agents/` |
 | [`ui-design`](ui-design/SKILL.md) | Thiết kế giao diện từ triết lý (người dùng & khoảnh khắc, chọn lọc, một điểm nhấn, sự dịu, nhất quán, tôn trọng người đọc) + vòng render → nhìn → phán xét; mọi stack, asset offline |
 | [`web-frontend`](web-frontend/SKILL.md) | Angular/React/Vue cho tool nội bộ: state, bảng dữ liệu lớn, form, asset self-host |
 | [`ml-pipeline`](ml-pipeline/SKILL.md) | Pipeline ML offline: tiền xử lý, training tái lập được, MLflow self-hosted |
@@ -71,7 +72,8 @@ triển khai air-gapped → bàn giao*.
 
 - `_config/CLAUDE.md` — chỉ dẫn toàn cục (ngôn ngữ, bối cảnh air-gapped mặc định,
   stack, nguyên tắc security-first), symlink về `~/.claude/CLAUDE.md`
-- `_config/install.sh` — tạo symlink trên máy mới
+- `_config/agents/` — định nghĩa agent cho `product-team`, symlink về `~/.claude/agents/`
+- `_config/install.sh` — tạo symlink trên máy mới (CLAUDE.md + agents)
 
 ## Duy trì
 
