@@ -45,11 +45,48 @@ triển khai air-gapped → bàn giao*.
 | [`secure-code-review`](secure-code-review/SKILL.md) | Review security-first cho Python/Go/Rust/C++/TS, chú trọng parser xử lý input hostile |
 | [`debug-assistant`](debug-assistant/SKILL.md) | Debug có hệ thống, gồm cả lỗi "local chạy được, lên air-gapped thì không" |
 | [`unit-test-generator`](unit-test-generator/SKILL.md) | Test pytest / go test / cargo test / vitest — happy, edge, error, hostile cases |
-| [`product-team`](product-team/SKILL.md) | Đội nhiều agent cho dự án web: lead designer (spec, review, FINAL) + dev-backend/shell/pages + integrator; luồng S/M-L, mỗi nhiệm vụ một agent mới, hỏi trước khi code, skill `verify` cho repo. Agent nằm ở `_config/agents/` |
 | [`ui-design`](ui-design/SKILL.md) | Thiết kế giao diện từ triết lý (người dùng & khoảnh khắc, chọn lọc, một điểm nhấn, sự dịu, nhất quán, tôn trọng người đọc) + vòng render → nhìn → phán xét; mọi stack, asset offline |
 | [`web-frontend`](web-frontend/SKILL.md) | Angular/React/Vue cho tool nội bộ: state, bảng dữ liệu lớn, form, asset self-host |
 | [`ml-pipeline`](ml-pipeline/SKILL.md) | Pipeline ML offline: tiền xử lý, training tái lập được, MLflow self-hosted |
 | [`model-evaluation`](model-evaluation/SKILL.md) | Đánh giá model detection/imbalanced: PR-AUC, threshold theo chi phí FP/FN, Optuna |
+
+### 👥 Đội agent
+
+| Skill | Nội dung |
+|---|---|
+| [`product-team`](product-team/SKILL.md) | Đội nhiều agent cho dự án web: lead designer (chính phiên chat) nghiên cứu, vẽ mockup, viết spec, review, chốt FINAL; dev agent code; integrator gộp, chạy gate, chụp ảnh nghiệm thu. Khách (bạn) quyết |
+
+Kích hoạt khi nói "dùng đội ngũ", "lập đội", "audit UI/UX rồi giao dev"… Lần đầu ở mỗi repo, skill chạy **intake**:
+hỏi những gì không suy ra được từ code, rồi sinh `.claude/team/` (quy tắc §0, chủ file, cấu hình gate), mục
+*Working context* trong `CLAUDE.md` và skill `verify` (chạy test/build với output gọn) vào repo đó.
+
+**Quy trình:** lead chọn luồng theo cỡ việc.
+- **S** (sửa lỗi, một thay đổi rõ): brief → 1 dev → kiểm → báo.
+- **M/L** (màn hình, luồng, API, migration):
+  1. nghiên cứu;
+  2. mockup (theo `ui-design`);
+  3. khách quyết, một lượt;
+  4. spec;
+  5. mỗi phần một agent mới, **hỏi trước khi code**;
+  6. integrator gộp, chạy gate, chụp ảnh;
+  7. lead review một lần; có lỗi thì giao brief sửa cho agent mới;
+  8. trình khách.
+- Push / deploy chỉ khi khách nói rõ.
+
+**Agent** (`_config/agents/`, cài vào `~/.claude/agents/`):
+
+| Agent | Vai |
+|---|---|
+| `dev-backend` | API, migration, test, tài liệu vận hành |
+| `dev-shell` | Router, layout, token, chart và helper dùng chung (chỉ khi đợt đó đổi thứ dùng chung) |
+| `dev-pages` | Các trang nghiệp vụ theo spec + mockup |
+| `integrator` | Gộp nhánh, gate, gate hồi quy cho mỗi lỗi, ảnh nghiệm thu |
+| `panel-user` | Vai người dùng nêu nhu cầu (mặc định tắt) |
+
+Quy tắc rút từ eval 2026-10-27 (4 bài × 3 phương án × 2 lần):
+- **Mỗi nhiệm vụ một agent mới**: rẻ hơn khoảng 13 lần so với giữ teammate qua nhiều đợt.
+- **Hỏi trước khi code**: bắt được các lỗi spec từng tốn vòng sửa.
+- **Dev chỉ chạy kiểm tra hẹp**; gate đầy đủ là việc của integrator.
 
 ### 📦 Đóng gói & triển khai air-gapped
 
@@ -65,7 +102,7 @@ triển khai air-gapped → bàn giao*.
 |---|---|
 | [`security-review-handover`](security-review-handover/SKILL.md) | Gate 6 lớp trước bàn giao: OWASP, authn/z, hardening, network, audit log, air-gapped |
 | [`secrets-management`](secrets-management/SKILL.md) | Quét secret lộ (cả git history), SOPS/age, Vault self-hosted, cấp phát khi deploy offline |
-| [`handover-docs`](handover-docs/SKILL.md) | Bộ 4 tài liệu bàn giao: OVERVIEW, DEPLOYMENT, RUNBOOK, TROUBLESHOOTING |
+| [`handover-docs`](handover-docs/SKILL.md) | Bộ 4 tài liệu bàn giao (OVERVIEW, DEPLOYMENT, RUNBOOK, TROUBLESHOOTING); xuất .docx theo TT22/2021/TT-BQP + script kiểm thể thức |
 
 ## Cách skills hoạt động
 
@@ -79,21 +116,25 @@ triển khai air-gapped → bàn giao*.
 
 ## Cấu hình đi kèm
 
-- `_config/CLAUDE.md` — chỉ dẫn toàn cục (ngôn ngữ, bối cảnh air-gapped mặc định,
-  stack, nguyên tắc security-first), symlink về `~/.claude/CLAUDE.md`
-- `_config/agents/` — định nghĩa agent cho `product-team`, symlink về `~/.claude/agents/`
-- `_config/install.sh` — tạo symlink trên máy mới (CLAUDE.md + agents)
+- `_config/CLAUDE.md`: chỉ dẫn toàn cục (ngôn ngữ, bối cảnh air-gapped mặc định, stack, nguyên tắc security-first).
+  Cài vào `~/.claude/CLAUDE.md`.
+- `_config/agents/`: định nghĩa agent cho `product-team`, cài vào `~/.claude/agents/`.
+- `_config/install.sh`: cài hai mục trên (symlink, hoặc bản copy trên Windows), rồi kiểm tra môi trường.
+  `--check` chỉ kiểm tra. Chạy lại bao nhiêu lần cũng được.
+- `synced/`: skill đồng bộ từ claude.ai, quản lý riêng từng máy, không nằm trong git.
 
 ## Duy trì
 
 ```bash
-# Sau khi sửa skill trên máy bất kỳ
+# Sau khi sửa skill hoặc agent trên máy bất kỳ: luôn sửa file TRONG repo, không sửa bản ở ~/.claude
 cd ~/.claude/skills && git add -A && git commit -m "..." && git push
 
 # Máy khác
 cd ~/.claude/skills && git pull
+bash _config/install.sh   # bắt buộc trên Windows (bản copy); macOS/Linux chỉ cần khi có agent/file cấu hình mới
 ```
 
 Thêm skill mới: tạo `<tên-mới>/SKILL.md` đúng format frontmatter, description
 phải chứa trigger phrases song ngữ; tránh trùng tên với skill built-in của
 Claude Code (`code-review`, `schedule`, `init`...). Cập nhật bảng trong README này.
+Thêm agent mới: đặt file vào `_config/agents/` rồi chạy lại `install.sh`.
