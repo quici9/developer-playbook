@@ -46,6 +46,11 @@ check() {
 
 if [ "${1:-}" = --check ]; then check; exit 0; fi
 
+# Windows filesystems drop the exec bit; without this, 755 scripts show as modified and block git pull
+if [ "$MODE" = copy ] && git -C "$DIR/.." rev-parse --git-dir >/dev/null 2>&1; then
+  git -C "$DIR/.." config core.fileMode false
+fi
+
 mkdir -p "$CLAUDE_HOME/agents"
 place "$DIR/CLAUDE.md" "$CLAUDE_HOME/CLAUDE.md"
 # Agent definitions used by the product-team skill (dev-backend, dev-pages, dev-shell, integrator, panel-user)

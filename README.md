@@ -24,6 +24,39 @@ bash ~/.claude/skills/_config/install.sh   # CLAUDE.md toàn cục + agent của
   - Chrome nằm chỗ lạ thì đặt `CHROME=/đường/dẫn`.
 - Script ghi đè file chỉ khi file đó là bản do chính nó tạo ra. File bạn tự sửa ở `~/.claude` thì nó dừng lại để bạn gộp tay.
 
+### Windows
+
+1. Cài phụ thuộc (PowerShell; máy không có `winget` thì tải installer từ trang chủ):
+
+   ```powershell
+   winget install --id Git.Git -e            # kèm Git Bash
+   winget install --id OpenJS.NodeJS.LTS -e  # Node >= 22
+   winget install --id Python.Python.3.12 -e # tuỳ chọn, cho handover-docs (.docx)
+   ```
+
+   Edge có sẵn trên Windows nên đủ cho các script chụp ảnh. Mở terminal mới để PATH nhận Git/Node.
+
+2. Clone và cài. Dùng **Git Bash**:
+
+   ```bash
+   git clone https://github.com/quici9/developer-playbook.git ~/.claude/skills
+   bash ~/.claude/skills/_config/install.sh
+   ```
+
+   Hoặc từ **PowerShell** (gọi bash của Git for Windows):
+
+   ```powershell
+   git clone https://github.com/quici9/developer-playbook.git "$HOME\.claude\skills"
+   & "$env:ProgramFiles\Git\bin\bash.exe" "$HOME/.claude/skills/_config/install.sh"
+   ```
+
+3. Cập nhật về sau: `git pull` rồi **chạy lại `install.sh`**, vì `CLAUDE.md` và agent ở `~/.claude` là bản copy.
+
+Lưu ý:
+- `install.sh` tự đặt `git config core.fileMode false` cho repo. Filesystem Windows không giữ exec bit, nên thiếu dòng này thì các script `.sh` bị báo là đã sửa và chặn `git pull`.
+- Báo `✗ Chrome` dù đã có Edge hoặc Chrome ở chỗ lạ: đặt `CHROME="C:/Program Files/.../msedge.exe"` trước lệnh `install.sh`.
+- Báo `· python3` dù đã cài Python: bình thường, vì trên Windows lệnh là `python`.
+
 ## Danh sách skills (18)
 
 Tổ chức theo vòng đời dự án: *đề xuất → thiết kế → xây dựng → đóng gói →
